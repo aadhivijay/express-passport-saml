@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 
 const router = require('./router');
 
@@ -15,5 +16,5 @@ app.use((req, res, next) => {
 app.use(router);
 
 app.listen(PORT, () => {
-  console.log(`App listening in ${PORT}`);
+  console.log(`App listening in http://localhost:${PORT}`);
 });
