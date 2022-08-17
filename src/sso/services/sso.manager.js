@@ -9,21 +9,26 @@ const idp = {
 const session = {
   id: '1',
   uid: 'u001',
-  code: 'saml',
+  code: 'Auth0',
 };
 
 async function login(req, res, next) {
+  // create a session
+  const encodedStr = Buffer.from(
+    JSON.stringify({
+      sid: session.id,
+      uid: session.uid,
+      code: session.code,
+    }),
+  ).toString('base64');
+
   const strategy = new SamlStrategy(
     {
       callbackUrl: `${idp.callback_url}`,
       entryPoint: idp.idp_url,
       cert: idp.idp_cert,
       additionalParams: {
-        RelayState: JSON.stringify({
-          sid: session.id,
-          uid: session.uid,
-          code: session.code,
-        }),
+        RelayState: encodedStr,
       },
     },
     (profile, done) => done(null, profile)

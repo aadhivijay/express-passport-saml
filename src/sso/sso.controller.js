@@ -22,12 +22,15 @@ async function authenticateCallback(req, res, next) {
 
 async function callback(req, res, next) {
   try {
-    const { body, params, query, ssoInfo } = req;
-    console.log('CALLBACK: params: ', params);
-    console.log('CALLBACK: query: ', query);
+    const { body, ssoInfo } = req;
     console.log('CALLBACK: BODY: ', body);
     console.log('CALLBACK: ssoInfo: ', ssoInfo);
-    res.redirect('/');
+    const { RelayState } = body;
+    console.log('CALLBACK: RelayState: ', RelayState);
+
+    // validate the session and create the user if not present already using `ssoInfo`
+
+    res.redirect(`/login?RelayState=${RelayState}`);
   } catch (error) {
     console.error('[ss-controller] Error: ', error);
     res.status(500).send({ error: true, msg: error });

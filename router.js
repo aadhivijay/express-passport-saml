@@ -9,7 +9,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.send({ success: true, path: '/login' });
+  const { query } = req;
+  const { RelayState } = query;
+  console.log('LOGIN: RelayState: ', RelayState);
+
+  const decodedStr = Buffer.from(RelayState, 'base64').toString('ascii');
+  console.log('decoded: ', decodedStr);
+
+  // validate the session and generate the jwt token
+
+  res.send({ success: true, token: 'test' });
 });
 
 router.use('/sso', ssoRouter);
